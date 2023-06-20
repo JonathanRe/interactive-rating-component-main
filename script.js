@@ -1,28 +1,39 @@
-console.log('script start');
-
-// cache the rating container DOM element
 const ratingWrapper = document.getElementById('rating-wrapper');
+const thankYouWrapper = document.getElementById('thank-you-wrapper');
 
-function selectRating() {
-    // find and remove "selected" class on all buttons
-    if (ratingWrapper.getElementsByClassName('selected')) {
-        for (let elem of ratingWrapper.getElementsByClassName('selected')) {
-            elem.classList.remove('selected');
-        }
+const ratingSpan = document.getElementById('rating-value');
+
+const button = document.getElementById('button_submit');
+
+let ratingValue;
+
+function selectRating(event) {
+    previouslySelectedItem = document.querySelector('.selected');
+    if (previouslySelectedItem) {
+        previouslySelectedItem.classList.remove('selected');
     }
 
-    // add "selected" class to clicked button
-    this.classList.add('selected');
+    clickedItem = event.srcElement;
+    clickedItem.classList.add('selected');
+    ratingValue = clickedItem.getAttribute('data-value');
 }
 
 
 function submitRating() {
-    // hide rating container
-    document.getElementById('rating-wrapper').classList.add('hidden');
+    if (!ratingValue) {
+        alert('Please select a rating before submitting!');
+    }
+    else {
+        ratingSpan.textContent = ratingValue;
 
-    // unhide thank-you container
-    document.getElementById('thank-you-wrapper').classList.remove('hidden');
+        ratingWrapper.classList.add('hidden');
+        thankYouWrapper.classList.remove('hidden');
+    }
 }
 
+button.addEventListener('click', submitRating);
 
-console.log('script end');
+options = document.querySelectorAll('.rating-option');
+options.forEach(element => {
+    element.addEventListener('click', selectRating);
+});
